@@ -1,0 +1,41 @@
+<head>
+  <link rel="stylesheet" href= "https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+<h1>Login</h1>
+<hr>
+<div class="container">
+  <form #loginForm="ngForm" (ngSubmit)="login(loginForm.value)" autocomplete="off" novalidate>
+    <div class="form-group">
+      <label for="userName"><b>User Name:</b></label>
+      <input (ngModel)="userName" name="userName" required 
+      id="userName" type="userName" pattern="[A-Za-z0-9]+" class="form-control" size="5"
+      placeholder="Username...."/>
+    </div>
+    <div class="form group">
+      <label for="password">Password: </label>
+      <input (ngModel)="password" name="password" required 
+      id="password" type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" class="form-control" 
+      placeholder="Password...." />
+    </div>
+    <button type="submit" [disabled]="loginForm.invalid" class="btn btn-primary">Login</button>
+    <button type="button" (click)="cancel()" class="btn btn-primary">Cancel</button>
+    <div id="message">
+      <h3>Password must contain the following:</h3>
+      <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+      <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+      <p id="number" class="invalid">A <b>number</b></p>
+      <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+      <style>h3{text-align: right;}
+      p{text-align: right;}
+      </style>
+    </div>
+    <div id="message">
+      <h3>Username must contain the following:</h3>
+      <p id="space" class="invalid">No space in between</p>
+      <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+      <style>h3{text-align: right;}
+      p{text-align: right;}
+      </style>
+    </div>
+  </form>
+</div>

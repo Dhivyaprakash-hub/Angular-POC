@@ -1,0 +1,65 @@
+thead{
+   text-shadow: 0 0 3px #FF0000;;
+    text-align:center;
+    z-index:0;
+    position:relative;
+}
+h1{
+    color: blue;
+    font-weight:300;
+    font-size:x-large;
+    font-family: 'Times New Roman', Times, serif;
+    text-shadow: 1px 1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
+}
+h2{
+  text-shadow:  1px 2px black, 0 0 25px blue, 0 0 5px darkblue;
+}
+.list{
+  float:right;
+  text-align:left;
+  width: 300px;
+  margin: 0 auto;
+  }
+.body{
+    background-color: aquamarine;
+}
+table, th, td {
+    border: 3px solid black;
+    border-collapse: collapse;
+    z-index:2;
+    position:relative;
+    
+  }
+  th, td {
+    background-color: #7fadad;
+    padding: 15px; 
+  }
+  .btn-right{
+    float:right;
+    color: blueviolet;   
+  }
+  .table{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  }
+  .tbody{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    text-shadow: 0 0 3px #FF0000;
+    color: blueviolet;
+  }
+  .pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+  }
+  
+  /* Style the active/current link */
+  .pagination a.active {
+    background-color: dodgerblue;
+    color: white;
+  }
+  
+  /* Add a grey background color on mouse-over */
+  .pagination a:hover:not(.active) {background-color: #ddd;}
+  

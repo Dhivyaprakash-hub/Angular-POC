@@ -1,0 +1,18 @@
+<div id="navbar" ng-show="isHomepage">
+<nav ng-if="currentPage == 'Tasks'" class="sidenav">
+  <ul class=' nav nav-pills'>
+    <li><a href="#" [routerLink]="['/tasks']" class='nav-link' routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Tasks</a></li>
+    <li><a1 href="#" [routerLink]="['/404']" class='nav-link' routerLinkActive='active'>Sprints</a1></li>
+    <li><a2 href="#" [routerLink]="['/blank-page']" class='nav-link' routerLinkActive='active'>Other Developers</a2></li>
+    <li><a2 href="#" [routerLink]="['/blank-page1']" class='nav-link' routerLinkActive='active'>Testers</a2></li>
+    <div class="navbar-header navbar-right navbar navbar-expand navbar-light bg-light">
+      <ul ng-if="currentPage == 'tasks'" class="nav nav-pills">
+        <li>
+          <a3 *ngIf="!auth.isAuthenticated()" [routerLink]="['user/login']" class="right">Login</a3>
+          <a *ngIf="auth.isAuthenticated()" [routerLink]="['user/profile']"> Welcome {{auth.currentUser.firstName}}</a></li>
+      </ul>
+    </div>
+  </ul>
+</nav>
+</div>
+<router-outlet></router-outlet>

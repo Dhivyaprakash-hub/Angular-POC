@@ -1,0 +1,21 @@
+<form data-ng-submit="updateEmployee()" name="empRegForm" method="post">
+    <input type="hidden" type="text" ng-model="product.taskNo">
+    <fieldset class="table-striped">
+        <input placeholder="Work Type" type="text" ng-model="product.workType" tabindex="1" required autofocus>
+    </fieldset>
+    <fieldset class="table-striped">
+        <input placeholder="Title Name" type="text" ng-model="product.titleName" tabindex="2" required autofocus>
+    </fieldset>
+    <fieldset class="table-striped">
+        <input placeholder="Created Date" type="text" ng-model="product.createdDate" tabindex="3" required autofocus>
+    </fieldset>
+    <fieldset class="table-striped">
+        <input placeholder="Updated Date" type="text" ng-model="product.updatedDate" tabindex="4" required autofocus>
+    </fieldset>
+    <fieldset class="table-striped">
+        <input placeholder="Current Status" type="text" ng-model="product.currentStatus" tabindex="5" required autofocus>
+    </fieldset>
+    <fieldset>
+        <button name="submit" type="submit" id="contact-submit">Submit</button>
+    </fieldset>
+</form>

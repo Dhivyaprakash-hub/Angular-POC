@@ -1,0 +1,70 @@
+@import "~bootstrap/dist/css/bootstrap.min.css";
+@import "~font-awesome/css/font-awesome.min.css";
+
+div.card-header {
+    font-size: large;
+    color: blueviolet;
+   }
+   
+   div.card {
+     margin-top: 10px
+   }
+   
+   .table {
+     margin-top: 10px
+   }
+   
+   a {
+     text-decoration: none; 
+   }
+   a:hover {
+     text-decoration: underline;
+   }
+   h1{
+    color: blue;
+    text-align: center;
+   }
+   .buttons{
+    position:below;
+    bottom: -4px;
+    right: 10px;
+   }
+   .pageTitle{
+    color: darkolivegreen
+   }
+   .row{
+    align-items:flex-end;
+   }
+   .hoverwell:hover {
+    background-color: #485563;
+    cursor: pointer;
+  }
+  
+  .container {
+    padding-top: 10px;
+  }
+  
+  .pointable {
+    cursor: pointer;
+  }
+  
+  button {
+    color: #555;
+  }
+  
+  [hidden] {
+    display: none !important;
+  }
+  
+  .toast-success {
+    background-color: #51a351;
+  }
+  .toast-error {
+    background-color: #bd362f;
+  }
+  .toast-info {
+    background-color: #2f96b4;
+  }
+  .toast-warning {
+    background-color: #f89406;
+  }
