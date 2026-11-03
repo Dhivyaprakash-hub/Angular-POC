@@ -11,8 +11,8 @@ import {Router} from '@angular/router'
 })
 
 export class LoginComponent{
-  userName: any
-  password: any
+  userName = ''
+  password = ''
   constructor(private authService:AuthService,private router:Router){
 
   }

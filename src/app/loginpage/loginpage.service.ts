@@ -11,20 +11,20 @@ export class LoginService{
     newLogin(): void {
         this.submitted = false;
       }
-    
+
       save() {
+        if (!this.loginService?.createLogin) return;
         this.loginService.createLogin(this.login)
-          .subscribe((data: any) => console.log(data), (error: any) => console.log(error));
-        this.gotoList();
+          .subscribe({ next: () => this.gotoList(), error: (error: any) => console.error('Unable to save login', error) });
       }
     gotoList() {
-        throw new Error("Method not implemented.");
+        this.submitted = false;
     }
     onSubmit() {
         this.submitted = true;
         this.save();
-        
+
       }
-    
-    
+
+
 }

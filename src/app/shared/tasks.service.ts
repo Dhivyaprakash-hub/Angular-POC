@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
+import { ITask } from "../task/task";
 
 @Injectable()
     export class TaskService{
         getTasks(){
-            let subject=new Subject()
+            let subject=new Subject<ITask[]>()
             setTimeout(()=> {subject.next(TASKS); subject.complete();},100)
             return subject
         }
@@ -12,14 +13,13 @@ import { Subject } from "rxjs";
         getTask(taskNo:number){
             return TASKS.find(task => task.taskNo === taskNo)
         }
-        saveTask(task:any){
-            task.taskNo=10
-            task.session=[]
-            TASKS.push(task)
+        saveTask(task: Omit<ITask, 'taskNo'> & { taskNo?: number }){
+            const nextId = Math.max(0, ...TASKS.map(existing => existing.taskNo)) + 1;
+            TASKS.push({ ...task, taskNo: nextId } as ITask)
         }
     }
 
-const TASKS =[
+const TASKS: ITask[] =[
     {
         "taskNo":1,
         "workType":"Task",

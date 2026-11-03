@@ -2,7 +2,7 @@ export interface ITask{
     taskNo:number;
     workType:string;
     titleName:string;
-    createdDate:Date;
-    updatedDate:Date;
+    createdDate:string | Date;
+    updatedDate:string | Date;
     currentStatus:string;
 }

@@ -1,4 +1,9 @@
-# POC
+# Angular Task Tracker POC
+
+This is a front-end learning project. Login is a local demonstration only: it
+accepts any non-empty username and does not authenticate users or protect data.
+Tasks live in browser memory and reset on refresh. Do not use real credentials
+or rely on this project for access control.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.8.
 
