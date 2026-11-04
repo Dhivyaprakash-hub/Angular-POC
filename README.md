@@ -1,32 +1,34 @@
-# Angular Task Tracker POC
+# Taskflow
 
-This is a front-end learning project. Login is a local demonstration only: it
-accepts any non-empty username and does not authenticate users or protect data.
-Tasks live in browser memory and reset on refresh. Do not use real credentials
-or rely on this project for access control.
+Taskflow is a responsive personal task board rebuilt with current Angular. Keep a small workload organized across To do, In progress, and Done; search it, filter by area, and switch between board and list views.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.8.
+## Features
 
-## Development server
+- Create, edit, move, and delete tasks with title validation, notes, area, priority, and due date.
+- Dashboard counts for open work, due or overdue work, completion, and board progress.
+- Board and list views, status and area filters, and task search (`Ctrl/⌘ + K`).
+- Browser-local persistence and a JSON export for backup.
+- Responsive layout with keyboard focus states, reduced-motion support, and accessible form labels.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Local use
 
-## Code scaffolding
+Requires Node.js 20.19+, 22.12+, or 24+ and npm.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```bash
+npm install
+npm start
+```
 
-## Build
+Open the local address printed by Angular CLI. Build the static production bundle with `npm run build`; output is in `dist/taskflow`.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Data and hosting
 
-## Running unit tests
+This is a single-browser personal workspace. Tasks are stored in that browser's local storage; there are no accounts, server, sync, or shared workspace. Browser storage is not an encrypted vault, so do not store confidential work details here. The static build can be hosted on a free static CDN without a paid runtime service.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Stack
 
-## Running end-to-end tests
+- Angular 21 with standalone components, signals, built-in template control flow, and zoneless change detection.
+- Typed reactive forms and strict TypeScript.
+- No UI framework or server dependencies.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+The earlier Angular 14 learning prototype is retained under `archive/legacy-angular14` for reference and is excluded from the active application build.

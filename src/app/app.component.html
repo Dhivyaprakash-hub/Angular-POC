@@ -1,18 +1,60 @@
-<div id="navbar" ng-show="isHomepage">
-<nav ng-if="currentPage == 'Tasks'" class="sidenav">
-  <ul class=' nav nav-pills'>
-    <li><a href="#" [routerLink]="['/tasks']" class='nav-link' routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Tasks</a></li>
-    <li><a1 href="#" [routerLink]="['/404']" class='nav-link' routerLinkActive='active'>Sprints</a1></li>
-    <li><a2 href="#" [routerLink]="['/blank-page']" class='nav-link' routerLinkActive='active'>Other Developers</a2></li>
-    <li><a2 href="#" [routerLink]="['/blank-page1']" class='nav-link' routerLinkActive='active'>Testers</a2></li>
-    <div class="navbar-header navbar-right navbar navbar-expand navbar-light bg-light">
-      <ul ng-if="currentPage == 'tasks'" class="nav nav-pills">
-        <li>
-          <a3 *ngIf="!auth.isAuthenticated()" [routerLink]="['user/login']" class="right">Login</a3>
-          <a *ngIf="auth.isAuthenticated()" [routerLink]="['user/profile']"> Welcome {{auth.currentUser.firstName}}</a></li>
-      </ul>
+<div class="app-shell">
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Taskflow home"><span class="brand-icon">tf</span><span>taskflow<span class="brand-dot">.</span></span></a>
+    <div class="top-context"><span class="context-dot"></span> PERSONAL WORKSPACE <span class="context-divider"></span> THIS BROWSER</div>
+    <div class="top-actions"><button class="export-button" type="button" (click)="exportBoard()"><span>↓</span> Export backup</button><button class="new-task-button" type="button" (click)="openCreate()"><span>＋</span> New task</button></div>
+  </header>
+
+  <main id="top" class="main-content">
+    <section class="welcome-row">
+      <div><p class="eyebrow"><span class="eyebrow-line"></span> YOUR PERSONAL WORKSPACE</p><h1>Make room for<br /><em>the work that matters.</em></h1><p class="welcome-copy">A clear view of what’s moving, what’s next, and what you’ve already made happen.</p></div>
+      <div class="welcome-aside"><div class="today-label">TODAY <span>{{ todayLabel() }}</span></div><div class="week-mark" aria-hidden="true"><span>✳</span><i></i><i></i><i></i><i></i></div><p>Small steps add up.<br /><b>Keep your momentum.</b></p></div>
+    </section>
+
+    <section class="summary-grid" aria-label="Task summary">
+      <article class="summary-card"><div class="summary-label"><span class="summary-icon icon-open">↗</span><span>OPEN TASKS</span></div><strong>{{ openCount() | number:'2.0' }}</strong><small>Work still in motion</small></article>
+      <article class="summary-card"><div class="summary-label"><span class="summary-icon icon-due">◷</span><span>DUE TODAY / OVERDUE</span></div><strong>{{ dueSoonCount() | number:'2.0' }}</strong><small>Worth a closer look</small></article>
+      <article class="summary-card"><div class="summary-label"><span class="summary-icon icon-done">✓</span><span>COMPLETED</span></div><strong>{{ completedCount() | number:'2.0' }}</strong><small>{{ completionPercent() }}% of your current board</small></article>
+      <article class="summary-card progress-summary"><div class="summary-label"><span class="summary-icon icon-progress">✳</span><span>BOARD MOMENTUM</span></div><div class="momentum-row"><strong>{{ completionPercent() }}<small>%</small></strong><div class="momentum-ring" [style.--progress]="completionPercent() + '%'" aria-hidden="true"><span>↗</span></div></div><div class="progress-track"><span [style.width]="completionPercent() + '%'" ></span></div></article>
+    </section>
+
+    <section class="workspace" aria-labelledby="board-heading">
+      <div class="workspace-heading"><div><p class="eyebrow"><span class="eyebrow-line"></span> YOUR BOARD</p><h2 id="board-heading">Let’s get into it.</h2></div><div class="view-toggle" role="group" aria-label="Choose task view"><button type="button" [class.active]="viewMode() === 'board'" [attr.aria-pressed]="viewMode() === 'board'" (click)="viewMode.set('board')"><span>▦</span> Board</button><button type="button" [class.active]="viewMode() === 'list'" [attr.aria-pressed]="viewMode() === 'list'" (click)="viewMode.set('list')"><span>☷</span> List</button></div></div>
+
+      <div class="toolbar"><label class="search-box"><span aria-hidden="true">⌕</span><input #searchInput type="search" placeholder="Find a task" aria-label="Find a task" [value]="search()" (input)="setSearch($event)" /><kbd>⌘ K</kbd></label><label class="category-select"><span>AREA</span><select aria-label="Filter by work area" [value]="categoryFilter()" (change)="setCategory($event)">@for (category of categories(); track category) { <option [value]="category">{{ category }}</option> }</select></label><div class="status-tabs" role="group" aria-label="Filter by status"><button type="button" [class.active]="statusFilter() === 'All work'" (click)="setStatusFilter('All work')">Everything <span>{{ allTasks().length }}</span></button><button type="button" [class.active]="statusFilter() === 'To do'" (click)="setStatusFilter('To do')">To do</button><button type="button" [class.active]="statusFilter() === 'In progress'" (click)="setStatusFilter('In progress')">In progress</button><button type="button" [class.active]="statusFilter() === 'Done'" (click)="setStatusFilter('Done')">Done</button></div></div>
+
+      @if (viewMode() === 'board') {
+        <div class="board-grid">
+          @for (column of columns(); track column.status) {
+            <section class="board-column" [attr.aria-label]="column.status + ' tasks'"><div class="column-heading"><div><span class="column-dot" [class.dot-done]="column.status === 'Done'" [class.dot-progress]="column.status === 'In progress'" [class.dot-todo]="column.status === 'To do'"></span><h3>{{ column.status }}</h3><span class="column-count">{{ column.tasks.length }}</span></div><button class="column-add" type="button" (click)="openCreate(column.status)" [attr.aria-label]="'Add task to ' + column.status">＋</button></div>
+              @for (task of column.tasks; track task.id) {
+                <article class="task-card" [class.task-complete]="task.status === 'Done'"><div class="task-card-top"><span class="priority-tag" [class.priority-high]="task.priority === 'High'" [class.priority-medium]="task.priority === 'Medium'" [class.priority-low]="task.priority === 'Low'"><i></i>{{ task.priority }}</span><div class="task-card-actions"><button type="button" (click)="openEdit(task)" [attr.aria-label]="'Edit ' + task.title">···</button></div></div><h4>{{ task.title }}</h4><p class="task-description">{{ task.description || 'Add a note to give this task more context.' }}</p><div class="task-card-footer"><span class="category-tag">{{ task.category }}</span><span class="due-date" [class.date-overdue]="dueState(task) === 'date-overdue'" [class.date-today]="dueState(task) === 'date-today'" [class.date-done]="dueState(task) === 'date-done'"><span>◷</span>{{ dueLabel(task.dueDate) }}</span></div><div class="task-card-bottom"><label class="status-select-label"><span>MOVE TO</span><select [value]="task.status" (change)="setStatus(task, $event)" [attr.aria-label]="'Change status for ' + task.title">@for (status of statuses; track status) { <option [value]="status">{{ status }}</option> }</select></label><button class="delete-task" type="button" (click)="removeTask(task)" [attr.aria-label]="'Delete ' + task.title">×</button></div></article>
+              } @empty { <div class="column-empty"><span>✳</span><p>Nothing here yet.</p><button type="button" (click)="openCreate()">Add a task <b>↗</b></button></div> }
+            </section>
+          }
+        </div>
+      } @else {
+        <div class="list-view"><div class="list-header"><span>THE TASK</span><span>AREA</span><span>PRIORITY</span><span>DUE</span><span>STATUS</span><span></span></div>
+          @for (task of visibleTasks(); track task.id) { <article class="list-row"><div class="list-task-name"><span class="list-check" [class.checked]="task.status === 'Done'">{{ task.status === 'Done' ? '✓' : '' }}</span><div><strong>{{ task.title }}</strong><small>{{ task.description || 'No additional notes' }}</small></div></div><span class="list-category">{{ task.category }}</span><span><span class="priority-tag" [class.priority-high]="task.priority === 'High'" [class.priority-medium]="task.priority === 'Medium'" [class.priority-low]="task.priority === 'Low'"><i></i>{{ task.priority }}</span></span><span class="due-date" [class.date-overdue]="dueState(task) === 'date-overdue'" [class.date-today]="dueState(task) === 'date-today'" [class.date-done]="dueState(task) === 'date-done'">{{ dueLabel(task.dueDate) }}</span><select class="list-status" [value]="task.status" (change)="setStatus(task, $event)" [attr.aria-label]="'Change status for ' + task.title">@for (status of statuses; track status) { <option [value]="status">{{ status }}</option> }</select><button class="list-edit" type="button" (click)="openEdit(task)" [attr.aria-label]="'Edit ' + task.title">↗</button></article> }
+          @if (!visibleTasks().length) { <div class="list-empty"><span>✳</span><h3>A little room to breathe.</h3><p>Nothing matches those filters. Try another view or create a fresh task.</p><button type="button" (click)="openCreate()">Create a task <b>↗</b></button></div> }
+        </div>
+      }
+      <div class="workspace-foot"><span><i></i> SAVED IN THIS BROWSER</span><span>{{ visibleTasks().length }} OF {{ allTasks().length }} TASKS SHOWING</span></div>
+    </section>
+    <footer class="main-footer"><span>BUILT FOR YOUR NEXT GOOD DAY</span><span>YOUR TASKS STAY ON THIS DEVICE <b>✳</b></span></footer>
+  </main>
+
+  @if (dialogOpen()) {
+    <div class="modal-backdrop" (click)="$event.target === $event.currentTarget && closeDialog()">
+      <section class="task-dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title"><div class="dialog-heading"><div><p class="eyebrow"><span class="eyebrow-line"></span> {{ editing() ? 'REFINE YOUR PLAN' : 'MAKE A LITTLE PROGRESS' }}</p><h2 id="dialog-title">{{ editing() ? 'Edit your task.' : 'Add a new task.' }}</h2></div><button class="dialog-close" type="button" (click)="closeDialog()" aria-label="Close task form">×</button></div>
+        <form [formGroup]="form" (ngSubmit)="saveTask()" novalidate>
+          <label class="form-field full-field">Task name <input formControlName="title" maxlength="90" placeholder="Give this task a clear name" autocomplete="off" />@if (form.controls.title.touched && form.controls.title.invalid) { <small class="field-error">Use 3–90 characters for the task name.</small> }</label>
+          <label class="form-field full-field">A little context <textarea formControlName="description" maxlength="260" rows="3" placeholder="What does done look like? (optional)"></textarea><small class="field-hint">{{ form.controls.description.value.length }}/260 characters</small></label>
+          <div class="form-grid"><label class="form-field">Status <select formControlName="status">@for (status of statuses; track status) { <option [value]="status">{{ status }}</option> }</select></label><label class="form-field">Priority <select formControlName="priority">@for (priority of priorities; track priority) { <option [value]="priority">{{ priority }}</option> }</select></label><label class="form-field">Due date <input formControlName="dueDate" type="date" /></label><label class="form-field">Area <input formControlName="category" maxlength="24" placeholder="Product" list="task-categories" /><datalist id="task-categories">@for (category of categories(); track category) { @if (category !== 'All areas') { <option [value]="category"></option> } }</datalist></label></div>
+          <div class="dialog-actions"><button class="cancel-button" type="button" (click)="closeDialog()">Cancel</button><button class="save-button" type="submit">{{ editing() ? 'Save changes' : 'Add to board' }} <span>↗</span></button></div>
+        </form>
+      </section>
     </div>
-  </ul>
-</nav>
+  }
+  @if (toast()) { <div class="toast" role="status"><span>✓</span>{{ toast() }}</div> }
 </div>
-<router-outlet></router-outlet>
