@@ -1,0 +1,32 @@
+<div>
+  <head>
+    <link rel="stylesheet" href= "https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+<style>
+  form {
+    float:right;
+    text-align:start;
+    width: 1000px;
+    margin: 0 auto;
+    font-size:x-large;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
+</style>
+<form>
+    <div class="row">
+      <div class="col-md-11">
+        <h2>{{task?.titleName}} </h2>
+      </div>
+    </div>
+    <div ng-class="center-aligned">
+    <div class="row">
+      <div class="col-md-6">
+        <div><strong>Task No:</strong> {{task?.taskNo}}</div>
+        <div><strong>Work Type:</strong> {{task?.workType}}</div>
+        <div><strong>Created Date:</strong> {{task?.createdDate}}</div>
+        <div><strong>Updated Date:</strong> {{task?.updatedDate}}</div>
+        <div><strong>Current Status:</strong> {{task?.currentStatus}}</div>
+      </div>
+  </div>
+    </div>
+</form>
