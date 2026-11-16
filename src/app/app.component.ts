@@ -28,6 +28,13 @@ export class AppComponent {
   readonly editing = signal<TaskItem | null>(null);
   readonly toast = signal('');
   @ViewChild('searchInput') private searchInput?: ElementRef<HTMLInputElement>;
+  private dialog?: HTMLDialogElement;
+
+  @ViewChild('taskDialog')
+  set taskDialog(ref: ElementRef<HTMLDialogElement> | undefined) {
+    this.dialog = ref?.nativeElement;
+    this.dialog?.showModal();
+  }
 
   readonly categories = computed(() => ['All areas', ...new Set(this.store.tasks().map((task) => task.category).filter(Boolean))]);
   readonly allTasks = this.store.tasks.asReadonly();
@@ -59,7 +66,6 @@ export class AppComponent {
 
   @HostListener('document:keydown', ['$event'])
   onGlobalKeydown(event: KeyboardEvent): void {
-    if (event.key === 'Escape' && this.dialogOpen()) this.closeDialog();
     if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
       event.preventDefault();
       this.searchInput?.nativeElement.focus();
@@ -111,7 +117,11 @@ export class AppComponent {
     this.dialogOpen.set(true);
   }
 
-  closeDialog(): void { this.dialogOpen.set(false); this.editing.set(null); }
+  closeDialog(): void {
+    this.dialog?.close();
+    this.dialogOpen.set(false);
+    this.editing.set(null);
+  }
 
   saveTask(): void {
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
