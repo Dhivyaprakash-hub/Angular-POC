@@ -123,7 +123,8 @@ export class AppComponent {
     this.editing.set(null);
   }
 
-  saveTask(): void {
+  saveTask(event: Event): void {
+    event.preventDefault();
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
     const task = this.form.getRawValue();
     const existing = this.editing();

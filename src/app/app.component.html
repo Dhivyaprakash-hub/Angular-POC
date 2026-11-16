@@ -47,11 +47,11 @@
   @if (dialogOpen()) {
     <dialog #taskDialog class="modal-backdrop" aria-labelledby="dialog-title" (cancel)="$event.preventDefault(); closeDialog()" (click)="$event.target === $event.currentTarget && closeDialog()">
       <section class="task-dialog"><div class="dialog-heading"><div><p class="eyebrow"><span class="eyebrow-line"></span> {{ editing() ? 'REFINE YOUR PLAN' : 'MAKE A LITTLE PROGRESS' }}</p><h2 id="dialog-title">{{ editing() ? 'Edit your task.' : 'Add a new task.' }}</h2></div><button class="dialog-close" type="button" (click)="closeDialog()" aria-label="Close task form">×</button></div>
-        <form [formGroup]="form" (ngSubmit)="saveTask()" novalidate>
+        <form [formGroup]="form" (submit)="saveTask($event)" novalidate>
           <label class="form-field full-field">Task name <input formControlName="title" maxlength="90" placeholder="Give this task a clear name" autocomplete="off" autofocus />@if (form.controls.title.touched && form.controls.title.invalid) { <small class="field-error">Use 3–90 characters for the task name.</small> }</label>
           <label class="form-field full-field">A little context <textarea formControlName="description" maxlength="260" rows="3" placeholder="What does done look like? (optional)"></textarea><small class="field-hint">{{ form.controls.description.value.length }}/260 characters</small></label>
           <div class="form-grid"><label class="form-field">Status <select formControlName="status">@for (status of statuses; track status) { <option [value]="status">{{ status }}</option> }</select></label><label class="form-field">Priority <select formControlName="priority">@for (priority of priorities; track priority) { <option [value]="priority">{{ priority }}</option> }</select></label><label class="form-field">Due date <input formControlName="dueDate" type="date" /></label><label class="form-field">Area <input formControlName="category" maxlength="24" placeholder="Product" list="task-categories" /><datalist id="task-categories">@for (category of categories(); track category) { @if (category !== 'All areas') { <option [value]="category"></option> } }</datalist></label></div>
-          <div class="dialog-actions"><button class="cancel-button" type="button" (click)="closeDialog()">Cancel</button><button class="save-button" type="submit">{{ editing() ? 'Save changes' : 'Add to board' }} <span>↗</span></button></div>
+          <div class="dialog-actions"><button class="cancel-button" type="button" (click)="closeDialog()">Cancel</button><button class="save-button" type="submit" (click)="saveTask($event)">{{ editing() ? 'Save changes' : 'Add to board' }} <span>↗</span></button></div>
         </form>
       </section>
     </dialog>
